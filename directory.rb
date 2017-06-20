@@ -4,10 +4,12 @@ def print_header
 end
 
 def print(students, starting_letter)
-  students.each_with_index do |student, index|
-    if student[:name][0].downcase == starting_letter.downcase && student[:name].length < 12
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  i = 0
+  while i < students.length
+    if students[i][:name][0].downcase == starting_letter.downcase && students[i][:name].length < 12
+      puts "#{i + 1}. #{students[i][:name]} (#{students[i][:cohort]} cohort)"
     end
+    i += 1
   end
 end
 
