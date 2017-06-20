@@ -1,4 +1,5 @@
 $line_width = 100
+$default_cohort = :november
 def print_header
   puts "The students of Villains Academy".center($line_width)
   puts "-------------".center($line_width)
@@ -25,14 +26,16 @@ def input_students
   name = gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
-    # add the student hash to the array
+    puts "What cohort is #{name} in?"
+    cohort = gets.chomp.to_sym
+    cohort = $default_cohort if !cohort.nil?
     puts "What is #{name}'s favourite hobby?"
     hobby = gets.chomp
     puts "What is #{name}'s height in cm?"
     height = gets.chomp
     puts "What is #{name}'s country of birth?"
     country = gets.chomp
-    students << {name: name, hobby: hobby, height: height, country: country, cohort: :november}
+    students << {name: name, hobby: hobby, height: height, country: country, cohort: cohort}
     puts "Now we have #{students.count} students"
     # get another name from the user
     puts "Please enter the next student's first name"
