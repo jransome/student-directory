@@ -5,11 +5,10 @@ def print_header
   puts "-------------".center($line_width)
 end
 
-def print(students, starting_letter)
-  i = 0
-  while i < students.length
-    puts "#{i + 1}. #{students[i][:name]} (#{students[i][:cohort]} cohort), birthplace: #{students[i][:country]}, height: #{students[i][:height]}cm, favourite hobby: #{students[i][:hobby]}.".ljust($line_width)
-    i += 1
+def print(students)
+  students.sort_by! {|s| s[:cohort] }
+  students.each_with_index do | student, i |
+    puts "#{i + 1}. #{student[:name]} (#{student[:cohort]} cohort), birthplace: #{student[:country]}, height: #{student[:height]}cm, favourite hobby: #{student[:hobby]}.".ljust($line_width)
   end
 end
 
@@ -27,8 +26,9 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     puts "What cohort is #{name} in?"
-    cohort = gets.chomp.to_sym
-    cohort = $default_cohort if !cohort.nil?
+    cohort = gets.chomp
+    cohort == "" ? cohort = $default_cohort : cohort = cohort.to_sym
+    puts cohort.inspect
     puts "What is #{name}'s favourite hobby?"
     hobby = gets.chomp
     puts "What is #{name}'s height in cm?"
@@ -49,5 +49,5 @@ end
 #nothing happens untill we call these methods
 students = input_students
 print_header
-print(students, "M")
+print(students)
 print_footer(students)
