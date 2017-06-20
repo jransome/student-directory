@@ -1,12 +1,13 @@
+$line_width = 100
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "The students of Villains Academy".center($line_width)
+  puts "-------------".center($line_width)
 end
 
 def print(students, starting_letter)
   i = 0
   while i < students.length
-    puts "#{i + 1}. #{students[i][:name]} (#{students[i][:cohort]} cohort), birthplace: #{students[i][:country]}, height: #{students[i][:height]}cm, favourite hobby: #{students[i][:hobby]}."
+    puts "#{i + 1}. #{students[i][:name]} (#{students[i][:cohort]} cohort), birthplace: #{students[i][:country]}, height: #{students[i][:height]}cm, favourite hobby: #{students[i][:hobby]}.".ljust($line_width)
     i += 1
   end
 end
