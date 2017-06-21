@@ -8,6 +8,10 @@ def print_header
 end
 
 def print_directory(students)
+  if students.empty?
+    puts "No students in database!"
+    return
+  end
   students.sort_by! {|s| s[:cohort] }
   students.each_with_index do | student, i |
     puts "#{i + 1}. #{student[:name]} (#{student[:cohort]} cohort), birthplace: #{student[:country]}, height: #{student[:height]}cm, favourite hobby: #{student[:hobby]}.".ljust($line_width)
@@ -15,6 +19,10 @@ def print_directory(students)
 end
 
 def print_footer(students)
+  if students.empty?
+    puts "No students in database!"
+    return
+  end
   print "Overall, we have #{students.count} great "
   puts students.count == 1 ? "student" : "students"
 end
