@@ -1,5 +1,7 @@
 $line_width = 100
-$default_cohort = :november
+$default_cohort = :November
+$months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
+
 def print_header
   puts "The students of Villains Academy".center($line_width)
   puts "-------------".center($line_width)
@@ -27,8 +29,13 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     puts "What cohort is #{name} in?"
-    cohort = gets.chomp
-    cohort == "" ? cohort = $default_cohort : cohort = cohort.to_sym
+    cohort = nil
+    until $months.include?(cohort)
+      cohort = gets.chomp.capitalize
+      puts "Not a valid cohort, please enter a month, or hit return to register the default cohort (#{$default_cohort})" if !$months.include?(cohort.to_sym) && cohort != ""
+      cohort = $default_cohort if cohort == ""
+      cohort = cohort.to_sym
+    end
     puts "What is #{name}'s favourite hobby?"
     hobby = gets.chomp
     puts "What is #{name}'s height in cm?"
