@@ -2,6 +2,34 @@ $line_width = 100
 $default_cohort = :November
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
 
+def interactive_menu
+  students = []
+  loop do
+    # print the menu of options
+    puts "1. Input new students"
+    puts "2. Show existing students"
+    puts "9. Exit"
+    # read input and save to a variable
+    selection = gets.chomp
+    # do what the user has asked
+    case selection
+      when "1"
+        # input students
+        students = input_students
+      when "2"
+        # show students
+        print_header
+        print_directory(students)
+        print_footer(students)
+      when "9"
+        # exit program
+        exit
+      else
+        puts "I don't know what you meant, please try again"
+    end
+  end
+end
+
 def print_header
   puts "The students of Villains Academy".center($line_width)
   puts "-------------".center($line_width)
@@ -63,7 +91,8 @@ def input_students
 end
 
 #nothing happens untill we call these methods
-students = input_students
-print_header
-print_directory(students)
-print_footer(students)
+interactive_menu
+#students = input_students
+#print_header
+#print_directory(students)
+#print_footer(students)
