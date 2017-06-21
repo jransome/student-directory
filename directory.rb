@@ -25,30 +25,30 @@ def input_students
   #create an empty array
   students = []
   # get the first names
-  name = gets.chomp
+  name = gets.gsub(/\n/, "")
   # while the name is not empty, repeat this code
   while !name.empty? do
     puts "What cohort is #{name} in?"
     cohort = nil
     until $months.include?(cohort)
-      cohort = gets.chomp.capitalize
+      cohort = gets.gsub(/\n/, "").capitalize
       puts "Not a valid cohort, please enter a month, or hit return to register the default cohort (#{$default_cohort})" if !$months.include?(cohort.to_sym) && cohort != ""
       cohort = $default_cohort if cohort == ""
       cohort = cohort.to_sym
     end
     puts "What is #{name}'s favourite hobby?"
-    hobby = gets.chomp
+    hobby = gets.gsub(/\n/, "")
     puts "What is #{name}'s height in cm?"
-    height = gets.chomp
+    height = gets.gsub(/\n/, "")
     puts "What is #{name}'s country of birth?"
-    country = gets.chomp
+    country = gets.gsub(/\n/, "")
     students << {name: name, hobby: hobby, height: height, country: country, cohort: cohort}
     print "Now we have #{students.count} "
     puts students.count == 1 ? "student" : "students"
     # get another name from the user
     puts "Please enter the next student's first name"
     puts "If you've finished adding students, hit return without typing instead"
-    name = gets.chomp
+    name = gets.gsub(/\n/, "")
   end
   # return array of students
   students
