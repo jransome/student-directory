@@ -28,7 +28,6 @@ def input_students
     puts "What cohort is #{name} in?"
     cohort = gets.chomp
     cohort == "" ? cohort = $default_cohort : cohort = cohort.to_sym
-    puts cohort.inspect
     puts "What is #{name}'s favourite hobby?"
     hobby = gets.chomp
     puts "What is #{name}'s height in cm?"
