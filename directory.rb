@@ -21,21 +21,18 @@ def load_students (filename = "students.csv")
     add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
   end
   file.close
-  puts "Loaded #{filename}!"
+  puts "Loaded #{@students.count} records from #{filename}"
 end
 
-def try_load_students
-  filename = ARGV.first # first argument from the command line
-  if filename.nil?
+def try_load_students(filename = ARGV.first)# first argument from the command line by default
+  if filename.nil? || filename.empty?
     load_students
     return
   end
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} records from #{filename}"
   else # if it doesn't exist
     puts "Sorry, #{filename} doesn't exist"
-    exit # quits the program
   end
 end
 
@@ -73,8 +70,9 @@ def process(selection)
       save_students
     when "4"
       #load students
-      puts "Loading student directory..."
-      load_students
+      puts "Please enter a filename. To load students.csv, hit return without typing"
+      filename = get_input
+      try_load_students(filename)
     when "9"
       # exit program
       puts "Bye!"
