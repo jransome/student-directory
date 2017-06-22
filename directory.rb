@@ -15,13 +15,25 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students (filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, country, height, hobby = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby}
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} records from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist"
+    exit # quits the program
+  end
 end
 
 def interactive_menu
@@ -30,7 +42,7 @@ def interactive_menu
     # print the menu of options
     print_menu
     # read input and save to a variable
-    selection = gets.chomp
+    selection = STDIN.gets.chomp
     # do what the user has asked
     process(selection)
   end
@@ -101,32 +113,33 @@ def input_students
   puts "Please enter the student's first name"
   puts "To quit instead, hit return without typing"
   # get the first names
-  name = gets.gsub(/\n/, "")
+  name = STDIN.gets.gsub(/\n/, "")
   # while the name is not empty, repeat this code
   while !name.empty? do
     puts "What cohort is #{name} in?"
     cohort = nil
     until $months.include?(cohort)
-      cohort = gets.gsub(/\n/, "").capitalize
+      cohort = STDIN.gets.gsub(/\n/, "").capitalize
       puts "Not a valid cohort, please enter a month, or hit return to register the default cohort (#{$default_cohort})" if !$months.include?(cohort.to_sym) && cohort != ""
       cohort = $default_cohort if cohort == ""
       cohort = cohort.to_sym
     end
     puts "What is #{name}'s favourite hobby?"
-    hobby = gets.gsub(/\n/, "")
+    hobby = STDIN.gets.gsub(/\n/, "")
     puts "What is #{name}'s height in cm?"
-    height = gets.gsub(/\n/, "")
+    height = STDIN.gets.gsub(/\n/, "")
     puts "What is #{name}'s country of birth?"
-    country = gets.gsub(/\n/, "")
+    country = STDIN.gets.gsub(/\n/, "")
     @students << {name: name, cohort: cohort, country: country, height: height,  hobby: hobby}
     print "Now we have #{@students.count} "
     puts @students.count == 1 ? "student" : "students"
     # get another name from the user
     puts "Please enter the next student's first name"
     puts "If you've finished adding students, hit return without typing instead"
-    name = gets.gsub(/\n/, "")
+    name = STDIN.gets.gsub(/\n/, "")
   end
 end
 
 #nothing happens untill we call these methods
+try_load_students
 interactive_menu
