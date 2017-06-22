@@ -15,6 +15,15 @@ def save_students
   file.close
 end
 
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+    name, cohort, country, height, hobby = line.chomp.split(",")
+    @students << {name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby}
+  end
+  file.close
+end
+
 def interactive_menu
   students = []
   loop do
@@ -38,6 +47,9 @@ def process(selection)
     when "3"
       # save students
       save_students
+    when "4"
+      #load students
+      load_students
     when "9"
       # exit program
       exit
@@ -50,6 +62,7 @@ def print_menu
   puts "1. Input new students"
   puts "2. Show existing students"
   puts "3. Save the list to students.csv"
+  puts "4. Load students.csv"
   puts "9. Exit"
 end
 
@@ -105,7 +118,7 @@ def input_students
     height = gets.gsub(/\n/, "")
     puts "What is #{name}'s country of birth?"
     country = gets.gsub(/\n/, "")
-    @students << {name: name, hobby: hobby, height: height, country: country, cohort: cohort}
+    @students << {name: name, cohort: cohort, country: country, height: height,  hobby: hobby}
     print "Now we have #{@students.count} "
     puts @students.count == 1 ? "student" : "students"
     # get another name from the user
