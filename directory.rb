@@ -8,9 +8,7 @@ def save_students
   file = File.open("students.csv", "w")
   # iterate over the student array
   @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:country], student[:height], student[:hobby]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    file.puts student.values.join(",")
   end
   file.close
 end
@@ -49,7 +47,7 @@ def interactive_menu
     # print the menu of options
     print_menu
     # read input and save to a variable
-    selection = STDIN.gets.chomp
+    selection = get_input
     # do what the user has asked
     process(selection)
   end
@@ -86,6 +84,10 @@ def print_menu
 end
 
 def show_students
+  if @students.empty?
+    puts "No students in database!"
+    return
+  end
   print_header
   print_students_list
   print_footer
@@ -97,10 +99,6 @@ def print_header
 end
 
 def print_students_list
-  if @students.empty?
-    puts "No students in database!"
-    return
-  end
   @students.sort_by! {|s| s[:cohort] }
   @students.each_with_index do | student, i |
     puts "#{i + 1}. #{student[:name]} (#{student[:cohort]} cohort), birthplace: #{student[:country]}, height: #{student[:height]}cm, favourite hobby: #{student[:hobby]}.".ljust($line_width)
@@ -108,42 +106,52 @@ def print_students_list
 end
 
 def print_footer
-  if @students.empty?
-    puts "No students in database!"
-    return
-  end
   print "Overall, we have #{@students.count} great "
   puts @students.count == 1 ? "student" : "students"
 end
 
+def get_input
+  STDIN.gets.gsub(/\n/, "")
+end
+
+def get_student_attribute (question)
+  puts question
+  get_input
+end
+
+def confirm_student_input
+  print "Now we have #{@students.count} "
+  puts @students.count == 1 ? "student" : "students"
+end
+
+def get_valid_cohort (name)
+  cohort = nil
+  puts "What cohort is #{name} in?"
+  until $months.include?(cohort)
+    cohort = get_input.capitalize
+    puts "Not a valid cohort, please enter a month, or hit return to register the default cohort (#{$default_cohort})" if !$months.include?(cohort.to_sym) && cohort != ""
+    cohort == "" ? cohort = $default_cohort : cohort = cohort.to_sym
+    return cohort
+  end
+end
+
 def input_students
-  puts "Please enter the student's first name"
-  puts "To quit instead, hit return without typing"
-  # get the first names
-  name = STDIN.gets.gsub(/\n/, "")
+  # get the first name
+  name_question = "Please enter the next student's first name\nTo quit instead, hit return without typing"
+  name = get_student_attribute(name_question)
   # while the name is not empty, repeat this code
   while !name.empty? do
-    puts "What cohort is #{name} in?"
-    cohort = nil
-    until $months.include?(cohort)
-      cohort = STDIN.gets.gsub(/\n/, "").capitalize
-      puts "Not a valid cohort, please enter a month, or hit return to register the default cohort (#{$default_cohort})" if !$months.include?(cohort.to_sym) && cohort != ""
-      cohort = $default_cohort if cohort == ""
-      cohort = cohort.to_sym
-    end
-    puts "What is #{name}'s favourite hobby?"
-    hobby = STDIN.gets.gsub(/\n/, "")
-    puts "What is #{name}'s height in cm?"
-    height = STDIN.gets.gsub(/\n/, "")
-    puts "What is #{name}'s country of birth?"
-    country = STDIN.gets.gsub(/\n/, "")
-    add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
-    print "Now we have #{@students.count} "
-    puts @students.count == 1 ? "student" : "students"
-    # get another name from the user
-    puts "Please enter the next student's first name"
-    puts "If you've finished adding students, hit return without typing instead"
-    name = STDIN.gets.gsub(/\n/, "")
+    # get all attributes
+    cohort = get_valid_cohort(name)
+    puts cohort.inspect
+    hobby = get_student_attribute("What is #{name}'s favourite hobby?")
+    height = get_student_attribute("What is #{name}'s height in cm?")
+    country = get_student_attribute("What is #{name}'s country of birth?")
+    # add the student to the directory array
+    add_student({name: name, cohort: cohort, country: country, height: height, hobby: hobby})
+    # confirm input and get another name from the user
+    confirm_student_input
+    name = get_student_attribute(name_question)
   end
 end
 
