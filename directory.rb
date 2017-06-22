@@ -5,22 +5,22 @@ $months = [:January, :February, :March, :April, :May, :June, :July, :August, :Se
 
 def save_students
   # open the file for writing
-  file = File.open("students.csv", "w")
-  # iterate over the student array
-  @students.each do |student|
-    file.puts student.values.join(",")
+  File.open("students.csv", "w") do |file|
+    # iterate over the student array
+    @students.each do |student|
+      file.puts student.values.join(",")
+    end
   end
-  file.close
   puts "Student directory saved!"
 end
 
 def load_students (filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, country, height, hobby = line.chomp.split(",")
-    add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
+  File.open(filename, "r") do |file|
+    file.readlines.each do |line|
+      name, cohort, country, height, hobby = line.chomp.split(",")
+      add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
+    end
   end
-  file.close
   puts "Loaded #{@students.count} records from #{filename}"
 end
 
