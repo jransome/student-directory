@@ -19,7 +19,7 @@ def load_students (filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, country, height, hobby = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby}
+    add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
   end
   file.close
 end
@@ -34,6 +34,10 @@ def try_load_students
     puts "Sorry, #{filename} doesn't exist"
     exit # quits the program
   end
+end
+
+def add_student (student)
+  @students << student
 end
 
 def interactive_menu
@@ -130,7 +134,7 @@ def input_students
     height = STDIN.gets.gsub(/\n/, "")
     puts "What is #{name}'s country of birth?"
     country = STDIN.gets.gsub(/\n/, "")
-    @students << {name: name, cohort: cohort, country: country, height: height,  hobby: hobby}
+    add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
     print "Now we have #{@students.count} "
     puts @students.count == 1 ? "student" : "students"
     # get another name from the user
