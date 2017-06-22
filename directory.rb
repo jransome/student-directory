@@ -11,6 +11,7 @@ def save_students
     file.puts student.values.join(",")
   end
   file.close
+  puts "Student directory saved!"
 end
 
 def load_students (filename = "students.csv")
@@ -20,6 +21,7 @@ def load_students (filename = "students.csv")
     add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
   end
   file.close
+  puts "Loaded #{filename}!"
 end
 
 def try_load_students
@@ -44,6 +46,8 @@ end
 def interactive_menu
   students = []
   loop do
+    puts
+    puts "MENU".center($line_width)
     # print the menu of options
     print_menu
     # read input and save to a variable
@@ -57,18 +61,23 @@ def process(selection)
   case selection
     when "1"
       # input students
+      puts "Getting ready to input students..."
       input_students
     when "2"
       # show students
+      puts "Showing student directory..."
       show_students
     when "3"
       # save students
+      puts "Saving student directory..."
       save_students
     when "4"
       #load students
+      puts "Loading student directory..."
       load_students
     when "9"
       # exit program
+      puts "Bye!"
       exit
     else
       puts "I don't know what you meant, please try again"
