@@ -3,6 +3,17 @@ $line_width = 100
 $default_cohort = :November
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
 
+def save_students
+  # open the file for writing
+  file = File.open("students.csv", "w")
+  # iterate over the student array
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort], student[:country], student[:height], student[:hobby]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
 
 def interactive_menu
   students = []
@@ -24,6 +35,9 @@ def process(selection)
     when "2"
       # show students
       show_students
+    when "3"
+      # save students
+      save_students
     when "9"
       # exit program
       exit
@@ -35,6 +49,7 @@ end
 def print_menu
   puts "1. Input new students"
   puts "2. Show existing students"
+  puts "3. Save the list to students.csv"
   puts "9. Exit"
 end
 
