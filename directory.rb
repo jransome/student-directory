@@ -26,7 +26,10 @@ end
 
 def try_load_students
   filename = ARGV.first # first argument from the command line
-  return if filename.nil?
+  if filename.nil?
+    load_students
+    return
+  end
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} records from #{filename}"
