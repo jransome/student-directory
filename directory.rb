@@ -1,25 +1,30 @@
+require 'csv'
+
 @students = [] # empty array accessible to all methods
 $line_width = 100
 $default_cohort = :November
+#$months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
+$keys = [:name, :cohort, :country, :height, :hobby]
 
 def save_students
   # open the file for writing
-  File.open("students.csv", "w") do |file|
+  CSV.open("students.csv", "w") do |csv|
     # iterate over the student array
     @students.each do |student|
-      file.puts student.values.join(",")
+      csv << student.values
     end
   end
   puts "Student directory saved!"
 end
 
 def load_students (filename = "students.csv")
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort, country, height, hobby = line.chomp.split(",")
-      add_student({name: name, cohort: cohort.to_sym, country: country, height: height, hobby: hobby})
-    end
+  CSV.read(filename).map do |line|
+    # read the csv file (which returns an array of arrays)
+    student = Hash[$keys.zip(line)]
+    # for each line, zip (ie merge) the line array with the array of hash keys defined in $keys and convert to a hash
+    add_student(student)
+    # add each hash representing a student to the @students array
   end
   puts "Loaded #{@students.count} records from #{filename}"
 end
@@ -138,8 +143,8 @@ def get_valid_cohort (name)
     cohort = get_input.capitalize
     puts "Not a valid cohort, please enter a month, or hit return to register the default cohort (#{$default_cohort})" if !$months.include?(cohort.to_sym) && cohort != ""
     cohort == "" ? cohort = $default_cohort : cohort = cohort.to_sym
-    return cohort
   end
+  return cohort
 end
 
 def input_students
@@ -150,7 +155,6 @@ def input_students
   while !name.empty? do
     # get all attributes
     cohort = get_valid_cohort(name)
-    puts cohort.inspect
     hobby = get_student_attribute("What is #{name}'s favourite hobby?")
     height = get_student_attribute("What is #{name}'s height in cm?")
     country = get_student_attribute("What is #{name}'s country of birth?")
